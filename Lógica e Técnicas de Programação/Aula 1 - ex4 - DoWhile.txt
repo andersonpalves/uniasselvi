@@ -1,0 +1,23 @@
+programa
+{
+  inclua biblioteca Util
+	funcao inicio()
+	{
+		inteiro senha = 0
+    inteiro digitado = 0
+		
+		faca
+		{
+      senha = Util.sorteia(1,10)
+			escreva ("Informe o número secreto: ")
+			leia (digitado)
+      escreva("A correta era: "+ senha +"\n")   
+		}
+		enquanto (senha != digitado)
+		
+		// A partir deste ponto do código é garantido que a idade 
+		// terá um valor válido e não causará erros inesperados		
+
+		escreva ("\nAcertou!\n")
+	}
+}

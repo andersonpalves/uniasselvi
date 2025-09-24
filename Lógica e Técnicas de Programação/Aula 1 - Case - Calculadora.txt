@@ -1,0 +1,56 @@
+programa
+{
+    funcao inicio()
+    {
+        inteiro opcao
+        real num1, num2, resultado 
+
+        escreva("Digite o primeiro número: ")
+        leia(num1)
+
+        escreva("Digite o segundo número: ")
+        leia(num2) 
+
+        escreva("Escolha uma operação:\n")
+        escreva("1 - Soma\n")
+        escreva("2 - Subtração\n")
+        escreva("3 - Multiplicação\n")
+        escreva("4 - Divisão\n")
+        leia(opcao)
+
+        escolha(opcao)
+        {
+            caso 1:
+                resultado = num1 + num2
+                escreva("Resultado da soma: ", resultado)
+                pare 
+
+            caso 2:
+                resultado = num1 - num2
+                escreva("Resultado da subtração: ", resultado)
+                pare 
+
+            caso 3:
+                resultado = num1 * num2
+                escreva("Resultado da multiplicação: ", resultado)
+                pare
+
+            caso 4:
+                se (num2 != 0)
+                {
+                  resultado = num1 / num2
+                  escreva("Resultado da divisão: ", resultado)
+                }
+                senao
+                {
+                  escreva("Erro: Divisão por zero não é permitida.")
+                }
+
+                pare 
+
+            caso contrario:
+                escreva("Opção inválida!")
+
+        }
+    }
+}

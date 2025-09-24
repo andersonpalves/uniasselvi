@@ -1,0 +1,32 @@
+programa {
+
+  inclua biblioteca Matematica
+
+  funcao inicio() {
+    real n1, n2, n3, media
+    escreva ("Informe a nota 1, 2 e 3\n")
+    leia (n1)
+    leia (n2)
+    leia (n3)
+
+    se(aprovacao(calculaMedia(n1,n2,n3)) == verdadeiro){
+        escreva("Aprovado com: "+ calculaMedia(n1,n2,n3))
+    }senao{
+        escreva("Reprovado com: "+ calculaMedia(n1,n2,n3))
+    }   
+  }
+
+ funcao real calculaMedia(real n1, real n2, real n3){
+  real media = (n1 + n2 + n3) / 3
+  retorne Matematica.arredondar(media,2)
+ }  
+
+  funcao logico aprovacao(real media){
+    se(media >= 7.0){
+      retorne verdadeiro
+    }
+    senao {
+      retorne falso
+    }    
+  }
+}

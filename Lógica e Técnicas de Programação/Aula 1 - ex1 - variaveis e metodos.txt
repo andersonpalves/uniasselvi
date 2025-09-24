@@ -1,0 +1,20 @@
+programa {
+
+  inclua biblioteca Matematica
+
+  funcao inicio() {
+    real dolar, reais
+    real cotacao
+
+    cotacao = 5.871
+
+    escreva("Qual a quantidade de dólares?   ")
+    leia (dolar)
+    escreva ("R$ " + calculo (dolar, cotacao) + " reais")
+  }
+
+ funcao real calculo(real dolar, real cot){
+  real resultado = Matematica.arredondar((dolar * cot),2)
+  retorne resultado
+ }  
+}
