@@ -1,0 +1,71 @@
+programa
+{
+    funcao inicio()
+    {
+        inteiro numeros[10], i, soma, maior, menor, pares
+        real media
+
+        soma = 0
+        pares = 0
+
+        para (i = 0; i < 10; i++)
+        {
+            escreva("Digite o ", i + 1, "º número: ")
+            leia(numeros[i])
+            soma = soma + numeros[i]
+
+            se (i == 0)
+            {
+                maior = numeros[i]
+                menor = numeros[i]
+            }
+            senao
+            {
+                se (numeros[i] > maior)
+                {
+                    maior = numeros[i]
+                }
+                se (numeros[i] < menor)
+                {
+                    menor = numeros[i]
+                }
+            }
+
+            se (numeros[i] % 2 == 0)
+            {
+                pares = pares + 1
+            }
+        }
+
+        media = soma / 10.0
+
+        escreva("Média: ", media, "\n")
+        escreva("Maior número: ", maior, "\n")
+        escreva("Menor número: ", menor, "\n")
+        escreva("Quantidade de pares: ", pares)
+    }
+}
+
+###################################################################################################################################
+
+Objetivo:
+Ler 10 números inteiros e calcular: a média dos valores, o maior e o menor número, e a quantidade de números pares.
+
+Etapas do programa
+
+Cria um vetor numeros para armazenar 10 valores inteiros.
+Inicializa as variáveis soma e pares com zero.
+Lê os 10 números em um laço para.
+Soma os números para depois calcular a média.
+Verifica e atualiza o maior e o menor número.
+Conta quantos são pares (% 2 == 0).
+Após o laço, calcula a média (media = soma / 10).
+Exibe os resultados na tela.
+
+Se o usuário digitar:
+3, 7, 2, 8, 10, 5, 6, 9, 1, 4
+
+Média = 5.5
+Maior = 10
+Menor = 1
+Pares = 5

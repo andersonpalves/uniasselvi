@@ -1,0 +1,55 @@
+programa
+{
+    funcao inicio()
+    {
+        inteiro numero, i, divisores
+
+        escreva("Digite um número inteiro: ")
+        leia(numero)
+
+        divisores = 0
+
+        para (i = 1; i <= numero; i++)
+        {
+            se (numero % i == 0)
+            {
+                divisores = divisores + 1
+            }
+        }
+
+        se (divisores == 2)
+        {
+            escreva("É um número primo.")
+        }
+        senao
+        {
+            escreva("Não é um número primo.")
+        }
+    }
+}
+
+###################################################################################################################################
+
+Lê um número inteiro informado pelo usuário.
+
+Zera o contador de divisores (divisores = 0).
+
+Faz um laço (para) que testa todos os números de 1 até o número digitado.
+
+Verifica se o número é divisível por i usando o operador % (resto da divisão).
+
+Se o resto for 0, significa que i é um divisor.
+
+Incrementa o contador de divisores.
+
+Após o laço, verifica quantos divisores o número teve:
+
+Se teve exatamente 2 divisores (1 e ele mesmo) → é primo.
+
+Caso contrário → não é primo.
+
+Exemplo
+
+Se o usuário digitar 7: Divisores: 1 e 7 → total de 2 → “É um número primo.”
+
+Se digitar 8: Divisores: 1, 2, 4, 8 → total de 4 → “Não é um número primo.”7

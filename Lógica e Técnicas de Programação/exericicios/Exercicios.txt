@@ -1,0 +1,8 @@
+1 - Soma basica: Elabore um algoritmo que leia dois números e mostre a soma deles.  
+2 - Calculadora de notas: Construa um algoritmo que leia 4 notas e mostre a média.
+3 - Verificador de Número Primo: Crie um algoritmo que receba um número inteiro positivo e verifique se ele é primo. Um número primo é aquele que só é divisível por 1 e por ele mesmo.
+4 - Conversor de Temperatura: Crie um programa que leia uma temperatura em Celsius e converta para Fahrenheit e Kelvin.
+5 - Estatísticas de Vetor: Faça um algoritmo que leia 10 números inteiros e armazene em um vetor. Depois, calcule e exiba:
+- A média dos valores
+- O maior e o menor número
+- Quantos são pares

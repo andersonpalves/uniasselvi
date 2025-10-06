@@ -1,0 +1,28 @@
+programa
+{
+    funcao inicio()
+    {
+        real celsius, fahrenheit, kelvin
+
+        escreva("Digite a temperatura em Celsius: ")
+        leia(celsius)
+
+        fahrenheit = (celsius * 9 / 5) + 32
+        kelvin = celsius + 273.15
+
+        escreva("Fahrenheit: ", fahrenheit, "\n")
+        escreva("Kelvin: ", kelvin)
+    }
+}
+
+###################################################################################################################################
+Converter uma temperatura informada em graus Celsius para as escalas Fahrenheit e Kelvin.
+
+Etapas do programa
+
+Lê a temperatura em Celsius digitada pelo usuário.
+
+Converte para Fahrenheit usando a fórmula: Fahrenheit=(Celsius×9/5)+32
+
+Converte para Kelvin usando a fórmula: Kelvin=Celsius+273.15
+Exibe os dois resultados na tela
