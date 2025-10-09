@@ -1,6 +1,7 @@
 package collections;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CrudSet {
     public static void main(String[] args) {

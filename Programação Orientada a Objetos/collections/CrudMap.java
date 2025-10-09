@@ -14,7 +14,8 @@ public class CrudMap {
         System.out.println("Usuários: " + listaDeUsuarios);
 
         // Update
-        listaDeUsuarios.put(2, "Daniela"); // altera valor da chave 2
+        listaDeUsuarios.put(3, "Daniela"); // altera valor da chave 2
+        listaDeUsuarios.put(10, "Daniela");
 
         // Delete
         listaDeUsuarios.remove(1);

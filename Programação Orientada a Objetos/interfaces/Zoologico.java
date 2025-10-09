@@ -32,16 +32,33 @@ class Gato extends Mamifero {
     }
 }
 
+class Coelho implements Animal{
+
+    @Override
+    public void emitirSom() {
+
+    }
+
+    @Override
+    public void mover() {
+
+    }
+}
+
 // Classe principal para testar
 public class Zoologico {
     public static void main(String[] args) {
         Animal a1 = new Cachorro();
         Animal a2 = new Gato();
+        Animal a3 = new Coelho();
 
         a1.emitirSom();
         a1.mover();
 
         a2.emitirSom();
         a2.mover();
+
+        a3.emitirSom();
+        a3.mover();
     }
 }
