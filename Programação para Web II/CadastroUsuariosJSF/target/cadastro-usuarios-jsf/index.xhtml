@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Cadastro de Usuários</title>
+</h:head>
+<h:body>
+    <h:form>
+        <p:panel header="Novo Usuário">
+            <p:inputText value="#{usuarioBean.usuario.nome}" label="Nome" required="true" />
+            <p:inputText value="#{usuarioBean.usuario.email}" label="Email" required="true" />
+            <p:commandButton value="Adicionar" action="#{usuarioBean.adicionar}" update="tabela" />
+        </p:panel>
+
+        <p:dataTable id="tabela" value="#{usuarioBean.usuarios}" var="u">
+            <p:column headerText="Nome">
+                <h:outputText value="#{u.nome}" />
+            </p:column>
+            <p:column headerText="Email">
+                <h:outputText value="#{u.email}" />
+            </p:column>
+        </p:dataTable>
+    </h:form>
+</h:body>
+</html>
