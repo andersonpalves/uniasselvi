@@ -1,0 +1,95 @@
+Cenário: Sistema Escolar
+
+1. DDL – Criação das Tabelas
+-- Tabela de Alunos
+CREATE TABLE Aluno (
+    id_aluno NUMBER PRIMARY KEY,
+    nome VARCHAR2(100),
+    email VARCHAR2(100) UNIQUE
+);
+
+-- Tabela de Professores
+CREATE TABLE Professor (
+    id_professor NUMBER PRIMARY KEY,
+    nome VARCHAR2(100),
+    especialidade VARCHAR2(100)
+);
+
+-- Tabela de Cursos
+CREATE TABLE Curso (
+    id_curso NUMBER PRIMARY KEY,
+    nome VARCHAR2(100),
+    id_professor NUMBER UNIQUE, -- Relacionamento 1:1 com Professor
+    FOREIGN KEY (id_professor) REFERENCES Professor(id_professor)
+);
+
+-- Tabela de Matrículas (Relacionamento N:N entre Aluno e Curso)
+CREATE TABLE Matricula (
+    id_aluno NUMBER,
+    id_curso NUMBER,
+    data_matricula DATE,
+    PRIMARY KEY (id_aluno, id_curso),
+    FOREIGN KEY (id_aluno) REFERENCES Aluno(id_aluno),
+    FOREIGN KEY (id_curso) REFERENCES Curso(id_curso)
+);
+
+2. DML – Inserção de Dados
+-- Inserindo Professores
+INSERT INTO Professor VALUES (1, 'Carlos Silva', 'Matemática');
+INSERT INTO Professor VALUES (2, 'Ana Souza', 'História');
+
+-- Inserindo Cursos
+INSERT INTO Curso VALUES (101, 'Álgebra', 1);
+INSERT INTO Curso VALUES (102, 'História Geral', 2);
+
+-- Inserindo Alunos
+INSERT INTO Aluno VALUES (1001, 'João Mendes', 'joao@email.com');
+INSERT INTO Aluno VALUES (1002, 'Maria Lima', 'maria@email.com');
+
+-- Inserindo Matrículas
+INSERT INTO Matricula VALUES (1001, 101, SYSDATE);
+INSERT INTO Matricula VALUES (1002, 101, SYSDATE);
+INSERT INTO Matricula VALUES (1002, 102, SYSDATE);
+
+3-DQL - Consultas
+-- Listar todos os alunos e os cursos em que estão matriculados
+SELECT a.nome AS aluno, c.nome AS curso
+FROM Aluno a
+JOIN Matricula m ON a.id_aluno = m.id_aluno
+JOIN Curso c ON m.id_curso = c.id_curso;
+
+-- Listar cursos e seus respectivos professores
+SELECT c.nome AS curso, p.nome AS professor
+FROM Curso c
+JOIN Professor p ON c.id_professor = p.id_professor;
+
+-- Contar quantos alunos estão matriculados em cada curso
+SELECT c.nome AS curso, COUNT(m.id_aluno) AS total_alunos
+FROM Curso c
+LEFT JOIN Matricula m ON c.id_curso = m.id_curso
+GROUP BY c.nome;
+
+4. DCL – Controle de Acesso
+-- Criar um usuário para o sistema escolar
+CREATE USER escola_user IDENTIFIED BY senha123;
+
+-- Conceder permissões
+GRANT CONNECT, RESOURCE TO escola_user;
+
+-- Permitir que o usuário consulte e insira dados nas tabelas
+GRANT SELECT, INSERT ON Aluno TO escola_user;
+GRANT SELECT, INSERT ON Curso TO escola_user;
+GRANT SELECT, INSERT ON Matricula TO escola_user;
+
+5-Remover tudo
+-- Remover tabela de Matrículas (depende de Aluno e Curso)
+DROP TABLE Matricula;
+
+-- Remover tabela de Cursos (depende de Professor)
+DROP TABLE Curso;
+
+-- Remover tabela de Alunos
+DROP TABLE Aluno;
+
+-- Remover tabela de Professores
+DROP TABLE Professor;
