@@ -1,6 +1,7 @@
-Cenário: Sistema Escolar
+Sistema Escolar — SQL Didático Completo
 
-1. DDL – Criação das Tabelas
+-- DDL – Criação das Tabela
+
 -- Tabela de Alunos
 CREATE TABLE Aluno (
     id_aluno NUMBER PRIMARY KEY,
@@ -33,7 +34,8 @@ CREATE TABLE Matricula (
     FOREIGN KEY (id_curso) REFERENCES Curso(id_curso)
 );
 
-2. DML – Inserção de Dados
+-- DML – Inserção de Dados
+
 -- Inserindo Professores
 INSERT INTO Professor VALUES (1, 'Carlos Silva', 'Matemática');
 INSERT INTO Professor VALUES (2, 'Ana Souza', 'História');
@@ -51,25 +53,43 @@ INSERT INTO Matricula VALUES (1001, 101, SYSDATE);
 INSERT INTO Matricula VALUES (1002, 101, SYSDATE);
 INSERT INTO Matricula VALUES (1002, 102, SYSDATE);
 
-3-DQL - Consultas
--- Listar todos os alunos e os cursos em que estão matriculados
+--DQL – Consultas
+-- Inner Join
+-- Alunos e os cursos em que estão matriculados
 SELECT a.nome AS aluno, c.nome AS curso
 FROM Aluno a
-JOIN Matricula m ON a.id_aluno = m.id_aluno
-JOIN Curso c ON m.id_curso = c.id_curso;
+INNER JOIN Matricula m ON a.id_aluno = m.id_aluno
+INNER JOIN Curso c ON m.id_curso = c.id_curso;
 
--- Listar cursos e seus respectivos professores
-SELECT c.nome AS curso, p.nome AS professor
-FROM Curso c
-JOIN Professor p ON c.id_professor = p.id_professor;
-
--- Contar quantos alunos estão matriculados em cada curso
+--LEFT OUTER JOIN
+-- Cursos e número de alunos matriculados (inclui cursos sem matrícula)
 SELECT c.nome AS curso, COUNT(m.id_aluno) AS total_alunos
 FROM Curso c
-LEFT JOIN Matricula m ON c.id_curso = m.id_curso
+LEFT OUTER JOIN Matricula m ON c.id_curso = m.id_curso
 GROUP BY c.nome;
 
-4. DCL – Controle de Acesso
+-- RIGHT OUTER JOIN
+-- Todos os alunos e os cursos em que estão matriculados (inclui alunos sem matrícula)
+SELECT a.nome AS aluno, c.nome AS curso
+FROM Curso c
+RIGHT OUTER JOIN Matricula m ON c.id_curso = m.id_curso
+RIGHT OUTER JOIN Aluno a ON a.id_aluno = m.id_aluno;
+
+--FULL OUTER JOIN
+-- Todos os alunos e todos os cursos, mesmo que não estejam relacionados
+SELECT a.nome AS aluno, c.nome AS curso
+FROM Aluno a
+FULL OUTER JOIN Matricula m ON a.id_aluno = m.id_aluno
+FULL OUTER JOIN Curso c ON m.id_curso = c.id_curso;
+
+--Cursos e seus respectivos professores
+
+SELECT c.nome AS curso, p.nome AS professor
+FROM Curso c
+INNER JOIN Professor p ON c.id_professor = p.id_professor;
+
+--DCL – Controle de Acesso
+
 -- Criar um usuário para o sistema escolar
 CREATE USER escola_user IDENTIFIED BY senha123;
 
@@ -81,7 +101,7 @@ GRANT SELECT, INSERT ON Aluno TO escola_user;
 GRANT SELECT, INSERT ON Curso TO escola_user;
 GRANT SELECT, INSERT ON Matricula TO escola_user;
 
-5-Remover tudo
+-- Remocao de Tabelas
 -- Remover tabela de Matrículas (depende de Aluno e Curso)
 DROP TABLE Matricula;
 
