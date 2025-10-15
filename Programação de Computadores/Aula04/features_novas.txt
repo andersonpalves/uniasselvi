@@ -1,0 +1,115 @@
+🔍 1. Busca por Nome ou Cidade
+🛠 Alterações:
+- Adicione um campo de busca na interface ClienteView.java:
+JTextField txtBusca = new JTextField(20);
+JButton btnBuscar = new JButton("Buscar");
+form.add(new JLabel("Buscar")); form.add(txtBusca); form.add(btnBuscar);
+
+
+- Adicione método no DAO:
+public List<Cliente> buscar(String termo) throws SQLException {
+    List<Cliente> lista = new ArrayList<>();
+    String sql = "SELECT * FROM clientes WHERE nome LIKE ? OR cidade LIKE ?";
+    try (Connection conn = conectar(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String busca = "%" + termo + "%";
+        stmt.setString(1, busca);
+        stmt.setString(2, busca);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Cliente c = new Cliente();
+            c.setId(rs.getInt("id"));
+            c.setNome(rs.getString("nome"));
+            c.setEmail(rs.getString("email"));
+            c.setTelefone(rs.getString("telefone"));
+            c.setCidade(rs.getString("cidade"));
+            c.setEstado(rs.getString("estado"));
+            lista.add(c);
+        }
+    }
+    return lista;
+}
+
+
+- Adicione evento no botão Buscar:
+btnBuscar.addActionListener(e -> {
+    try {
+        String termo = txtBusca.getText();
+        modelo.setRowCount(0);
+        List<Cliente> lista = dao.buscar(termo);
+        for (Cliente c : lista) {
+            modelo.addRow(new Object[]{c.getId(), c.getNome(), c.getEmail(), c.getTelefone(), c.getCidade(), c.getEstado()});
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Erro na busca: " + ex.getMessage());
+    }
+});
+
+
+
+🔢 2. Ordenação por Coluna
+🛠 Alterações:
+- Ative ordenação na tabela:
+tabela.setAutoCreateRowSorter(true);
+
+
+📌 Isso permite que o usuário clique no cabeçalho da tabela para ordenar por qualquer coluna.
+
+📤 3. Exportação para Excel (.xlsx)
+🛠 Requisitos:
+- Adicione a biblioteca Apache POI ao seu projeto (via Maven ou JAR manual):
+<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>5.2.3</version>
+</dependency>
+
+
+🛠 Código para exportar:
+- Adicione botão:
+JButton btnExportar = new JButton("Exportar Excel");
+botoes.add(btnExportar);
+
+
+- Adicione evento:
+btnExportar.addActionListener(e -> {
+    try {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Salvar como");
+        if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            exportarParaExcel(file.getAbsolutePath());
+            JOptionPane.showMessageDialog(this, "Exportado com sucesso!");
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Erro ao exportar: " + ex.getMessage());
+    }
+});
+
+
+- Método de exportação:
+private void exportarParaExcel(String caminho) throws Exception {
+    XSSFWorkbook workbook = new XSSFWorkbook();
+    XSSFSheet sheet = workbook.createSheet("Clientes");
+
+    Row header = sheet.createRow(0);
+    for (int i = 0; i < modelo.getColumnCount(); i++) {
+        header.createCell(i).setCellValue(modelo.getColumnName(i));
+    }
+
+    for (int i = 0; i < modelo.getRowCount(); i++) {
+        Row row = sheet.createRow(i + 1);
+        for (int j = 0; j < modelo.getColumnCount(); j++) {
+            Object valor = modelo.getValueAt(i, j);
+            row.createCell(j).setCellValue(valor != null ? valor.toString() : "");
+        }
+    }
+
+    try (FileOutputStream out = new FileOutputStream(caminho + ".xlsx")) {
+        workbook.write(out);
+    }
+    workbook.close();
+}
+
+
+
+Se quiser, posso gerar um ZIP com tudo isso pronto e comentado. Ou ainda adicionar filtros por estado, paginação, ou exportar para PDF. Só dizer!

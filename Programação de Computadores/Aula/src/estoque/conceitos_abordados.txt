@@ -1,0 +1,11 @@
+| Conceito                | Onde é aplicado                             |
+| ----------------------- | ------------------------------------------- |
+| Classe e Objeto         | `Produto`, `Alimento`, `Eletronico`         |
+| Encapsulamento          | Atributos privados + getters/setters        |
+| Herança                 | Subclasses herdam de `Produto`              |
+| Polimorfismo            | Interface `Gerenciavel` e classes concretas |
+| Interface               | `Gerenciavel` e `EstoqueRepository`         |
+| Abstração               | `Produto` é abstrata                        |
+| Collections (List, Map) | Em `EstoqueService`                         |
+| Menu interativo         | `Main`                                      |
+| CRUD + Atualização      | Todas as operações básicas implementadas    |
