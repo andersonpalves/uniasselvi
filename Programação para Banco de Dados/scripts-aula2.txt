@@ -1,0 +1,201 @@
+Script Adaptado para MySQL Workbench 8.0
+-- DDL – Criação das Tabelas
+-- Tabela de Alunos
+CREATE TABLE Aluno (
+    id_aluno INT PRIMARY KEY,
+    nome VARCHAR(100),
+    email VARCHAR(100) UNIQUE
+);
+
+-- Tabela de Professores
+CREATE TABLE Professor (
+    id_professor INT PRIMARY KEY,
+    nome VARCHAR(100),
+    especialidade VARCHAR(100)
+);
+
+-- Tabela de Cursos
+CREATE TABLE Curso (
+    id_curso INT PRIMARY KEY,
+    nome VARCHAR(100),
+    id_professor INT UNIQUE,
+    FOREIGN KEY (id_professor) REFERENCES Professor(id_professor)
+);
+
+-- Tabela de Matrículas
+CREATE TABLE Matricula (
+    id_aluno INT,
+    id_curso INT,
+    data_matricula DATE,
+    PRIMARY KEY (id_aluno, id_curso),
+    FOREIGN KEY (id_aluno) REFERENCES Aluno(id_aluno),
+    FOREIGN KEY (id_curso) REFERENCES Curso(id_curso)
+);
+
+
+-- DML – Inserção de Dados
+-- Professores
+INSERT INTO Professor VALUES (1, 'Carlos Silva', 'Matemática');
+INSERT INTO Professor VALUES (2, 'Ana Souza', 'História');
+
+-- Cursos
+INSERT INTO Curso VALUES (101, 'Álgebra', 1);
+INSERT INTO Curso VALUES (102, 'História Geral', 2);
+
+-- Alunos
+INSERT INTO Aluno VALUES (1001, 'João Mendes', 'joao@email.com');
+INSERT INTO Aluno VALUES (1002, 'Maria Lima', 'maria@email.com');
+
+-- Matrículas
+INSERT INTO Matricula VALUES (1001, 101, CURDATE());
+INSERT INTO Matricula VALUES (1002, 101, CURDATE());
+INSERT INTO Matricula VALUES (1002, 102, CURDATE());
+
+
+-- DQL – Consultas
+-- Alunos e cursos
+SELECT a.nome AS aluno, c.nome AS curso
+FROM Aluno a
+JOIN Matricula m ON a.id_aluno = m.id_aluno
+JOIN Curso c ON m.id_curso = c.id_curso;
+
+-- Cursos e número de alunos
+SELECT c.nome AS curso, COUNT(m.id_aluno) AS total_alunos
+FROM Curso c
+LEFT JOIN Matricula m ON c.id_curso = m.id_curso
+GROUP BY c.nome;
+
+-- Alunos e cursos (inclui alunos sem matrícula)
+SELECT a.nome AS aluno, c.nome AS curso
+FROM Aluno a
+LEFT JOIN Matricula m ON a.id_aluno = m.id_aluno
+LEFT JOIN Curso c ON m.id_curso = c.id_curso;
+
+-- Cursos e professores
+SELECT c.nome AS curso, p.nome AS professor
+FROM Curso c
+JOIN Professor p ON c.id_professor = p.id_professor;
+
+
+-- DCL – Controle de Acesso
+-- Criar usuário
+CREATE USER 'escola_user'@'localhost' IDENTIFIED BY 'senha123';
+
+-- Conceder permissões
+GRANT SELECT, INSERT ON Aluno TO 'escola_user'@'localhost';
+GRANT SELECT, INSERT ON Curso TO 'escola_user'@'localhost';
+GRANT SELECT, INSERT ON Matricula TO 'escola_user'@'localhost';
+
+-- Remoção de Tabelas
+DROP TABLE IF EXISTS Matricula;
+DROP TABLE IF EXISTS Curso;
+DROP TABLE IF EXISTS Aluno;
+DROP TABLE IF EXISTS Professor;
+
+
+Procedures, Functions, Cursores e Trigger
+Procedure: Inserir Matrícula
+DELIMITER //
+CREATE PROCEDURE InserirMatricula (
+    IN p_id_aluno INT,
+    IN p_id_curso INT
+)
+BEGIN
+    INSERT INTO Matricula (id_aluno, id_curso, data_matricula)
+    VALUES (p_id_aluno, p_id_curso, CURDATE());
+END;
+//
+DELIMITER ;
+
+
+-- Function: Total de Alunos por Curso
+DELIMITER //
+CREATE FUNCTION TotalAlunosCurso (p_id_curso INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE v_total INT;
+    SELECT COUNT(*) INTO v_total
+    FROM Matricula
+    WHERE id_curso = p_id_curso;
+    RETURN v_total;
+END;
+//
+DELIMITER ;
+
+
+🔁 Cursor: Listar Alunos e Cursos
+DELIMITER //
+CREATE PROCEDURE ListarAlunosCursos()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE aluno_nome VARCHAR(100);
+    DECLARE curso_nome VARCHAR(100);
+    DECLARE cur CURSOR FOR
+        SELECT a.nome, c.nome
+        FROM Aluno a
+        JOIN Matricula m ON a.id_aluno = m.id_aluno
+        JOIN Curso c ON m.id_curso = c.id_curso;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO aluno_nome, curso_nome;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        SELECT CONCAT('Aluno: ', aluno_nome, ' | Curso: ', curso_nome) AS Info;
+    END LOOP;
+    CLOSE cur;
+END;
+//
+DELIMITER ;
+
+
+⚡ Trigger: Impedir Matrícula Duplicada
+DELIMITER //
+CREATE TRIGGER VerificaMatriculaDuplicada
+BEFORE INSERT ON Matricula
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM Matricula
+      x
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Aluno já está matriculado neste curso.';
+    END IF;
+END;
+//
+DELIMITER ;
+
+Chamar as procs:
+CALL InserirMatricula(1001, 102);
+CALL ListarAlunosCursos();
+
+Chamar as functions:
+SELECT TotalAlunosCurso(101) AS total_matriculados;
+
+Testa a trigger:
+-- Este comando deve falhar se o aluno já estiver matriculado no curso
+INSERT INTO Matricula (id_aluno, id_curso, data_matricula)
+VALUES (1001, 101, CURDATE());
+
+SELECT a.nome AS aluno, c.nome AS curso
+FROM Aluno a
+JOIN Matricula m ON a.id_aluno = m.id_aluno
+JOIN Curso c ON m.id_curso = c.id_curso;
+
+---REMOVER TUDO
+
+DROP TRIGGER IF EXISTS VerificaMatriculaDuplicada;
+
+DROP PROCEDURE IF EXISTS InserirMatricula;
+DROP PROCEDURE IF EXISTS ListarAlunosCursos;
+
+DROP FUNCTION IF EXISTS TotalAlunosCurso;
+
+DROP TABLE IF EXISTS Matricula;
+DROP TABLE IF EXISTS Curso;
+DROP TABLE IF EXISTS Aluno;
+DROP TABLE IF EXISTS Professor;
