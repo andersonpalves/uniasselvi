@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Cadastro de Usuários</title>
+</h:head>
+<h:body>
+
+    <h:form id="form">
+
+        <!-- Growl para mensagens vindas do FacesContext -->
+        <p:growl id="msgs" showDetail="true" sticky="false" />
+
+        <p:panel header="Novo / Editar Usuário" style="margin-bottom:10px;">
+            <h:panelGrid columns="2" cellpadding="5">
+
+                <h:outputLabel for="nome" value="Nome:" />
+                <p:inputText id="nome" value="#{usuarioBean.usuario.nome}" label="Nome"
+                             required="true" requiredMessage="Nome é obrigatório." />
+
+                <h:outputLabel for="email" value="Email:" />
+                <p:inputText id="email" value="#{usuarioBean.usuario.email}" label="Email"
+                             required="true" requiredMessage="Email é obrigatório." />
+
+            </h:panelGrid>
+
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <!-- Salvar cobre criar e editar -->
+                    <p:commandButton value="Salvar"
+                                     action="#{usuarioBean.salvar}"
+                                     update="form:tabela form:msgs"
+                                     process="@form" />
+
+                    <!-- Novo limpa o formulário -->
+                    <p:commandButton value="Novo"
+                                     action="#{usuarioBean.novo}"
+                                     update="form"
+                                     process="@this" />
+                </p:toolbarGroup>
+            </p:toolbar>
+        </p:panel>
+
+        <p:dataTable id="tabela" value="#{usuarioBean.usuarios}" var="u"
+                     rows="10" paginator="true" widgetVar="tblUsuarios">
+
+            <p:column headerText="ID" style="width:60px;text-align:center;">
+                <h:outputText value="#{u.id}" />
+            </p:column>
+
+            <p:column headerText="Nome">
+                <h:outputText value="#{u.nome}" />
+            </p:column>
+
+            <p:column headerText="Email">
+                <h:outputText value="#{u.email}" />
+            </p:column>
+
+            <p:column headerText="Ações" style="width:180px;text-align:center;">
+                <!-- Editar -->
+                <p:commandButton value="Editar"
+                                 action="#{usuarioBean.editar(u)}"
+                                 update="form form:msgs"
+                                 process="@this" />
+
+                <!-- Remover -->
+                <p:commandButton value="Remover"
+                                 action="#{usuarioBean.remover(u)}"
+                                 update="form:tabela form:msgs"
+                                 process="@this"
+                                 styleClass="ui-button-danger"
+                                 onclick="return confirm('Confirma remoção deste usuário?');" />
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+</h:body>
+</html>
