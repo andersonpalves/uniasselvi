@@ -124,7 +124,7 @@ END;
 DELIMITER ;
 
 
-🔁 Cursor: Listar Alunos e Cursos
+Cursor: Listar Alunos e Cursos
 DELIMITER //
 CREATE PROCEDURE ListarAlunosCursos()
 BEGIN
@@ -151,8 +151,7 @@ END;
 //
 DELIMITER ;
 
-
-⚡ Trigger: Impedir Matrícula Duplicada
+Trigger: Impedir Matrícula Duplicada
 DELIMITER //
 CREATE TRIGGER VerificaMatriculaDuplicada
 BEFORE INSERT ON Matricula
