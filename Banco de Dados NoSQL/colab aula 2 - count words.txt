@@ -1,0 +1,34 @@
+# Instala o PySpark
+!pip install pyspark
+
+# Importa as bibliotecas necessárias
+from pyspark.sql import SparkSession
+
+# Cria uma sessão Spark
+spark = SparkSession.builder \
+    .appName("Contagem de Palavras") \
+    .getOrCreate()
+
+# Cria um contexto Spark
+sc = spark.sparkContext
+
+# Texto de exemplo
+texto = ["Big data é importante",
+         "Big data ajuda na tomada de decisão",
+         "Tomada de decisão é essencial"]
+
+# Cria um RDD a partir do texto
+rdd = sc.parallelize(texto)
+
+# Divide as linhas em palavras
+palavras = rdd.flatMap(lambda linha: linha.split(" "))
+
+# Mapeia cada palavra para o par (palavra, 1)
+pares = palavras.map(lambda palavra: (palavra.lower(), 1))
+
+# Reduz os pares somando os valores por palavra
+contagem = pares.reduceByKey(lambda a, b: a + b)
+
+# Exibe o resultado
+for palavra, total in contagem.collect():
+    print(f"{palavra}: {total}")

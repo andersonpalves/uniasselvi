@@ -1,0 +1,189 @@
+CRUD Didático — Sistema Escolar com MongoDB
+
+-- Inserir um aluno
+db.alunos.insertOne({
+  nome: "João Silva",
+  idade: 15,
+  serie: "9º ano",
+  turma: "A",
+  notas: [8.5, 7.0, 9.2]
+});
+
+db.alunos.insertOne({
+  nome: "João Silva",
+  idade: 15,
+  dataNascimento: "15/10/2010",
+  serie: "9º ano",
+  turma: "A",
+  notas: [8.5, 7.0, 9.2]
+});
+
+--Inserir um professor
+db.professores.insertOne({
+  nome: "Maria Oliveira",
+  disciplina: "Matemática",
+  email: "maria@escola.com"
+});
+
+--Inserir uma turma
+db.turmas.insertOne({
+  nome: "Turma A",
+  serie: "9º ano",
+  professorResponsavel: "Maria Oliveira"
+});
+
+--Listar todos os alunos
+db.alunos.find();
+
+--Buscar aluno por nome
+db.alunos.findOne({ nome: "João Silva" });
+
+--Listar turmas do 9º ano
+db.turmas.find({ serie: "9º ano" });
+
+--Atualizar nota de um aluno
+db.alunos.updateOne(
+  { nome: "João Silva" },
+  { $set: { notas: [9.0, 8.5, 9.2] } }
+);
+
+--Alterar professor responsável pela turma
+db.turmas.updateOne(
+  { nome: "Turma A" },
+  { $set: { professorResponsavel: "Carlos Mendes" } }
+);
+
+--Remover aluno
+db.alunos.deleteOne({ nome: "João Silva" });
+
+--Remover turma
+db.turmas.deleteOne({ nome: "Turma A" });
+
+
+1. Inserir múltiplos alunos
+Insira três alunos diferentes com nome, idade, série, turma e notas. Use insertMany.
+
+2. Cadastrar professores
+Insira dois professores com nome, disciplina e e-mail. Depois, liste todos os professores cadastrados.
+
+3. Criar turmas
+Crie duas turmas diferentes, cada uma com série e professor responsável. Depois, liste todas as turmas da série "8º ano".
+
+4. Buscar aluno por critérios
+Encontre todos os alunos da turma "B" que têm nota maior que 8 em pelo menos uma disciplina.
+Dica: use $elemMatch para buscar dentro do array notas.
+
+5. Atualizar dados do aluno
+Atualize a idade de um aluno específico e adicione o campo email com um valor fictício.
+
+6. Calcular média de notas
+Adicione um campo media ao documento de um aluno, calculando a média das notas manualmente.
+
+7. Trocar aluno de turma
+Atualize a turma de um aluno chamado "Ana Souza" de "B" para "C".
+
+8. Remover alunos com baixa média
+Remova todos os alunos cuja média de notas seja menor que 6.
+Dica: primeiro adicione o campo media com $set, depois use deleteMany.
+
+9. Relatório de professores
+Liste todos os professores que lecionam "Português" ou "História".
+Dica: use o operador $in.
+
+10. Desafio final
+Crie uma função que insira um novo aluno e automaticamente calcule e insira sua média de notas no mesmo documento.
+
+###########################################################################################################################
+
+Respostas dos Exercícios — Sistema Escolar com MongoDB
+
+1. Inserir múltiplos alunos
+
+db.alunos.insertMany([
+  { nome: "Ana Souza", idade: 14, serie: "8º ano", turma: "B", notas: [7.5, 8.0, 6.5] },
+  { nome: "Carlos Lima", idade: 15, serie: "9º ano", turma: "A", notas: [9.0, 8.5, 9.2] },
+  { nome: "Beatriz Rocha", idade: 13, serie: "7º ano", turma: "C", notas: [6.0, 7.0, 7.5] }
+])
+
+2. Cadastrar professores
+
+db.professores.insertMany([
+  { nome: "José Pereira", disciplina: "Português", email: "jose@escola.com" },
+  { nome: "Luciana Costa", disciplina: "História", email: "luciana@escola.com" }
+])
+
+db.professores.find()
+
+3. Criar turmas
+
+db.turmas.insertMany([
+  { nome: "Turma B", serie: "8º ano", professorResponsavel: "José Pereira" },
+  { nome: "Turma C", serie: "8º ano", professorResponsavel: "Luciana Costa" }
+])
+
+db.turmas.find({ serie: "8º ano" })
+
+4. Buscar aluno por critérios
+
+db.alunos.find({
+  turma: "B",
+  notas: { $elemMatch: { $gt: 8 } }
+})
+
+5. Atualizar dados do aluno
+
+db.alunos.updateOne(
+  { nome: "Ana Souza" },
+  { $set: { idade: 15, email: "ana@escola.com" } }
+)
+
+6. Calcular média de notas
+
+db.alunos.updateOne(
+  { nome: "Carlos Lima" },
+  { $set: { media: (9.0 + 8.5 + 9.2) / 3 } }
+)
+
+7. Trocar aluno de turma
+
+db.alunos.updateOne(
+  { nome: "Ana Souza" },
+  { $set: { turma: "C" } }
+)
+
+8. Remover alunos com baixa média
+
+// Primeiro, adicionar campo média
+db.alunos.updateMany({}, [
+  { $set: { media: { $avg: "$notas" } } }
+])
+
+// Depois, remover alunos com média menor que 6
+db.alunos.deleteMany({ media: { $lt: 6 } })
+
+9. Relatório de professores
+
+db.professores.find({
+  disciplina: { $in: ["Português", "História"] }
+})
+
+10. Desafio final — Inserir aluno com média calculada
+
+const notas = [7.5, 8.0, 9.0];
+const media = notas.reduce((a, b) => a + b, 0) / notas.length;
+
+db.alunos.insertOne({
+  nome: "Fernanda Dias",
+  idade: 14,
+  serie: "8º ano",
+  turma: "B",
+  notas: notas,
+  media: media
+})
+
+
+
+
+
+
+
