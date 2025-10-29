@@ -1,0 +1,168 @@
+-- DDL – Criação das Tabelas
+-- Tabela de Alunos
+CREATE TABLE Aluno (
+    id_aluno NUMBER PRIMARY KEY,
+    nome VARCHAR2(100),
+    email VARCHAR2(100) UNIQUE
+);
+
+-- Tabela de Professores
+CREATE TABLE Professor (
+    id_professor NUMBER PRIMARY KEY,
+    nome VARCHAR2(100),
+    especialidade VARCHAR2(100)
+);
+
+-- Tabela de Cursos
+CREATE TABLE Curso (
+    id_curso NUMBER PRIMARY KEY,
+    nome VARCHAR2(100),
+    id_professor NUMBER UNIQUE,
+    CONSTRAINT fk_professor FOREIGN KEY (id_professor) REFERENCES Professor(id_professor)
+);
+
+-- Tabela de Matrículas
+CREATE TABLE Matricula (
+    id_aluno NUMBER,
+    id_curso NUMBER,
+    data_matricula DATE,
+    PRIMARY KEY (id_aluno, id_curso),
+    CONSTRAINT fk_aluno FOREIGN KEY (id_aluno) REFERENCES Aluno(id_aluno),
+    CONSTRAINT fk_curso FOREIGN KEY (id_curso) REFERENCES Curso(id_curso)
+);
+
+
+--DML
+-- Professores
+INSERT INTO Professor VALUES (1, 'Carlos Silva', 'Matemática');
+INSERT INTO Professor VALUES (2, 'Ana Souza', 'História');
+
+-- Cursos
+INSERT INTO Curso VALUES (101, 'Álgebra', 1);
+INSERT INTO Curso VALUES (102, 'História Geral', 2);
+
+-- Alunos
+INSERT INTO Aluno VALUES (1001, 'João Mendes', 'joao@email.com');
+INSERT INTO Aluno VALUES (1002, 'Maria Lima', 'maria@email.com');
+
+-- Matrículas
+INSERT INTO Matricula VALUES (1001, 101, SYSDATE);
+INSERT INTO Matricula VALUES (1002, 101, SYSDATE);
+INSERT INTO Matricula VALUES (1002, 102, SYSDATE);
+
+-- DQL – Consultas
+-- Alunos e cursos
+SELECT a.nome AS aluno, c.nome AS curso
+FROM Aluno a
+JOIN Matricula m ON a.id_aluno = m.id_aluno
+JOIN Curso c ON m.id_curso = c.id_curso;
+
+-- Cursos e número de alunos
+SELECT c.nome AS curso, COUNT(m.id_aluno) AS total_alunos
+FROM Curso c
+LEFT JOIN Matricula m ON c.id_curso = m.id_curso
+GROUP BY c.nome;
+
+-- Alunos e cursos (inclui alunos sem matrícula)
+SELECT a.nome AS aluno, c.nome AS curso
+FROM Aluno a
+LEFT JOIN Matricula m ON a.id_aluno = m.id_aluno
+LEFT JOIN Curso c ON m.id_curso = c.id_curso;
+
+-- Cursos e professores
+SELECT c.nome AS curso, p.nome AS professor
+FROM Curso c
+JOIN Professor p ON c.id_professor = p.id_professor;
+
+--DCL – Controle de Acesso
+-- Criar usuário
+CREATE USER escola_user IDENTIFIED BY senha123;
+
+-- Conceder permissões
+GRANT CONNECT TO escola_user;
+GRANT SELECT, INSERT ON Aluno TO escola_user;
+GRANT SELECT, INSERT ON Curso TO escola_user;
+GRANT SELECT, INSERT ON Matricula TO escola_user;
+
+--Procedure: Inserir Matrícula
+CREATE OR REPLACE PROCEDURE InserirMatricula (
+    p_id_aluno IN NUMBER,
+    p_id_curso IN NUMBER
+) AS
+BEGIN
+    INSERT INTO Matricula (id_aluno, id_curso, data_matricula)
+    VALUES (p_id_aluno, p_id_curso, SYSDATE);
+END;
+/
+
+-- Function 
+CREATE OR REPLACE FUNCTION TotalAlunosCurso (p_id_curso IN NUMBER)
+RETURN NUMBER IS
+    v_total NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_total
+    FROM Matricula
+    WHERE id_curso = p_id_curso;
+    RETURN v_total;
+END;
+/
+
+-- Cursor
+CREATE OR REPLACE PROCEDURE ListarAlunosCursos IS
+    CURSOR cur IS
+        SELECT a.nome, c.nome
+        FROM Aluno a
+        JOIN Matricula m ON a.id_aluno = m.id_aluno
+        JOIN Curso c ON m.id_curso = c.id_curso;
+    aluno_nome VARCHAR2(100);
+    curso_nome VARCHAR2(100);
+BEGIN
+    OPEN cur;
+    LOOP
+        FETCH cur INTO aluno_nome, curso_nome;
+        EXIT WHEN cur%NOTFOUND;
+        DBMS_OUTPUT.PUT_LINE('Aluno: ' || aluno_nome || ' | Curso: ' || curso_nome);
+    END LOOP;
+    CLOSE cur;
+END;
+/
+
+--Trigger matricula duplicada
+CREATE OR REPLACE TRIGGER VerificaMatriculaDuplicada
+BEFORE INSERT ON Matricula
+FOR EACH ROW
+DECLARE
+    v_exists NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_exists
+    FROM Matricula
+    WHERE id_aluno = :NEW.id_aluno AND id_curso = :NEW.id_curso;
+
+    IF v_exists > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Aluno já está matriculado neste curso.');
+    END IF;
+END;
+/
+
+-- Execução
+-- Chamar procedures
+EXEC InserirMatricula(1001, 102);
+EXEC ListarAlunosCursos;
+
+-- Chamar function
+SELECT TotalAlunosCurso(101) AS total_matriculados FROM dual;
+
+-- Testar trigger (deve falhar se já matriculado)
+INSERT INTO Matricula (id_aluno, id_curso, data_matricula)
+VALUES (1001, 101, SYSDATE);
+
+--Remover all
+DROP TRIGGER VerificaMatriculaDuplicada;
+DROP PROCEDURE InserirMatricula;
+DROP PROCEDURE ListarAlunosCursos;
+DROP FUNCTION TotalAlunosCurso;
+
+DROP TABLE Matricula;
+DROP TABLE Curso;
+DROP TABLE Aluno;
+DROP TABLE Professor;
