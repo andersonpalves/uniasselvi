@@ -1,0 +1,43 @@
+-- Etapa 1: Criar nós (Pessoas)
+CREATE (:Pessoa {nome: 'Ana', idade: 25});
+CREATE (:Pessoa {nome: 'Bruno', idade: 30});
+CREATE (:Pessoa {nome: 'Carlos', idade: 28});
+CREATE (:Pessoa {nome: 'Diana', idade: 22});
+
+-- Etapa 2: Criar relacionamentos (Amizades)
+MATCH (a:Pessoa {nome: 'Ana'}), (b:Pessoa {nome: 'Bruno'})
+CREATE (a)-[:AMIGO_DE]->(b);
+
+MATCH (a:Pessoa {nome: 'Ana'}), (c:Pessoa {nome: 'Carlos'})
+CREATE (a)-[:AMIGO_DE]->(c);
+
+MATCH (b:Pessoa {nome: 'Bruno'}), (d:Pessoa {nome: 'Diana'})
+CREATE (b)-[:AMIGO_DE]->(d);
+
+-- Etapa 3: Consultar amigos de Ana
+MATCH (ana:Pessoa {nome: 'Ana'})-[:AMIGO_DE]->(amigos)
+RETURN amigos.nome, amigos.idade;
+
+-- Etapa 4: Ver conexões indiretas (amigos dos amigos)
+MATCH (ana:Pessoa {nome: 'Ana'})-[:AMIGO_DE]->()-[:AMIGO_DE]->(indiretos)
+RETURN DISTINCT indiretos.nome;
+
+-- Etapa 5: Contar número de amigos por pessoa
+MATCH (p:Pessoa)-[:AMIGO_DE]->(amigo)
+RETURN p.nome, COUNT(amigo) AS total_amigos;
+
+-- Etapa 6: Atualizar dados de um nó
+MATCH (c:Pessoa {nome: 'Carlos'})
+SET c.idade = 29;
+
+-- Verificando as conexoes
+MATCH (p1:Pessoa)-[:AMIGO_DE]->(p2:Pessoa)
+RETURN p1.nome AS Pessoa, p2.nome AS Amigo;
+
+--Criando relação entre Carlos e Diana
+MATCH (a:Pessoa {nome: 'Carlos'}), (b:Pessoa {nome: 'Diana'})
+CREATE (a)-[:AMIGO_DE]->(b);
+
+--Removendo relação entre Carlos e Diana
+MATCH (a:Pessoa {nome: 'Carlos'})-[r:AMIGO_DE]->(b:Pessoa {nome: 'Diana'})
+DELETE r;
