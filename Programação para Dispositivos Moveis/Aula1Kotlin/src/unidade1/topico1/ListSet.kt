@@ -1,8 +1,8 @@
-package unidade1
+package unidade1.topico1
 
 fun main() {
     // Lista (permite elementos repetidos)
-    val lista = mutableListOf("Kotlin", "Java", "Python")
+    val lista = mutableListOf("Kotlin","Kotlin", "Java", "Python")
     lista.add("Go")
     println("Lista: $lista")
 
