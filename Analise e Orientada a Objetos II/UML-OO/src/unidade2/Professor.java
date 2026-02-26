@@ -1,3 +1,5 @@
+package unidade2;
+
 class Professor extends Pessoa {
     private String disciplina;
 
