@@ -1,0 +1,90 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: JWT Exemplo
+meta:
+  id: wrk_9b34bb3375e144a7b31b4cebc77d772b
+  created: 1773596864815
+  modified: 1773596864815
+  description: ""
+collection:
+  - url: http://localhost:8080/login
+    name: Login
+    meta:
+      id: req_9f5a4a82eb1d473bb36e23c08bbd0aab
+      created: 1773596871654
+      modified: 1773597514987
+      isPrivate: false
+      description: ""
+      sortKey: -1773596871654
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+         "username":"admin",
+         "password":"123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: http://localhost:8080/hello
+    name: Hello
+    meta:
+      id: req_f06cb136d1c64c0490743016f70bbb94
+      created: 1773596927212
+      modified: 1773597531101
+      isPrivate: false
+      description: ""
+      sortKey: -1773596927212
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.4.0
+        description: ""
+        disabled: false
+      - name: Authorization
+        value: Bearer SEU_TOKEN
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_d81f0e13ef470387e850713174dd38a511a6549e
+    created: 1773596864822
+    modified: 1773597502639
+  cookies:
+    - id: b031f044-9f9e-45a1-b625-d627105e21c0
+      key: JSESSIONID
+      value: 5E0EABE1D60BEA7BF3AD73C07AA57777
+      domain: localhost
+      path: /
+      secure: false
+      httpOnly: true
+      hostOnly: true
+environments:
+  name: Base Environment
+  meta:
+    id: env_d81f0e13ef470387e850713174dd38a511a6549e
+    created: 1773596864819
+    modified: 1773596864819
+    isPrivate: false
