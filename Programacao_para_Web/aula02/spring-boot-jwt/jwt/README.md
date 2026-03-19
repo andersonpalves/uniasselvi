@@ -48,3 +48,38 @@ Se o token for válido, você receberá a seguinte resposta:
 ```
 Rota protegida!
 ```
+### 3. Explicação Técnica
+# 🔐 Spring Boot + JWT — Explicação da Proteção e Expiração
+
+### 1️⃣ Por que a rota `/hello` está protegida?
+
+A proteção acontece na classe de configuração de segurança (`SecurityConfig`):
+
+```java
+.authorizeHttpRequests(auth -> auth
+        .requestMatchers("/login").permitAll()
+        .anyRequest().authenticated()
+)
+```
+📌 Significado
+
+| Regra             | Explicação                |
+| ----------------- | ------------------------- |
+| `/login`          | Acesso público            |
+| `anyRequest()`    | Qualquer outra rota       |
+| `authenticated()` | Precisa estar autenticado |
+
+✅ Resultado
+
+/login → público
+
+/hello → protegido (precisa de token)
+
+✅ Resumo
+
+| Item               | Onde acontece     |
+| ------------------ | ----------------- |
+| proteção da rota   | `SecurityConfig`  |
+| validação do token | `JwtFilter`       |
+| geração do token   | `JwtUtil`         |
+| tempo de expiração | `setExpiration()` |
