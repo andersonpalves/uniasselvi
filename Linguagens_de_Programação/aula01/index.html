@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Tarefas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    #lista {
+      list-style: none;
+      padding: 0;
+    }
+    #lista li {
+      background: #fff;
+      margin: 5px 0;
+      padding: 10px;
+      border-left: 5px solid #007bff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    button {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="texto-tarefa">Minha Lista de Tarefas</h1>
+  <input type="text" id="novaTarefa" placeholder="Digite uma tarefa">
+  <button onclick="adicionarTarefa()">Adicionar</button>
+
+  <ul id="lista"></ul>
+
+  <script>
+    function adicionarTarefa() {
+      const input = document.getElementById("novaTarefa");
+      const texto = input.value.trim();
+      if (texto === "") return;
+
+      const li = document.createElement("li");
+      li.textContent = texto;
+
+      const btn = document.createElement("button");
+      btn.textContent = "Remover";
+      btn.onclick = () => li.remove();
+
+      li.appendChild(btn);
+      document.getElementById("lista").appendChild(li);
+      input.value = "";
+    }
+  </script>
+</body>
+</html>
