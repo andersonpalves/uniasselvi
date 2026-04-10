@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Exemplo JavaScript Completo</title>
+</head>
+<body>
+
+<h1 id="titulo">Teste JavaScript</h1>
+<button onclick="mudarTexto()">Clique aqui</button>
+
+<script>
+// HELLO WORLD
+// Exibe uma mensagem no console e na tela
+console.log("Hello World!");
+document.write("<h2>Hello World</h2>");
+document.write("Olá, mundo!<br><br>");
+
+
+// TIPOS DE DADOS
+// JavaScript possui tipos dinâmicos
+document.write("<h2>Tipos de Dados</h2>");
+let nome = "Anderson"; // string
+let idade = 30;        // number
+let ativo = true;      // boolean
+let nulo = null;       // null
+let indefinido;        // undefined
+
+document.write(typeof nome + "<br>");
+document.write(typeof idade + "<br>");
+document.write(typeof ativo + "<br>");
+document.write("<br>");
+
+
+// DECLARAÇÃO DE VARIÁVEIS
+// var (escopo global), let (escopo de bloco), const (constante)
+document.write("<h2>Variáveis</h2>");
+var x = 10;
+let y = 20;
+const z = 30;
+
+document.write(x + ", " + y + ", " + z + "<br><br>");
+
+
+// OPERADORES LÓGICOS
+// && (E), || (OU), ! (NÃO)
+document.write("<h2>Operadores Lógicos</h2>");
+let resultadoLogico = (x > 5 && y > 10);
+document.write("Resultado lógico: " + resultadoLogico + "<br><br>");
+
+
+// OPERADORES ARITMÉTICOS
+// +, -, *, /, %
+document.write("<h2>Operadores Aritméticos</h2>");
+document.write("Soma: " + (x + y) + "<br>");
+document.write("Subtração: " + (x - y) + "<br>");
+document.write("Multiplicação: " + (x * y) + "<br>");
+document.write("Divisão: " + (x / y) + "<br><br>");
+
+
+// CONTROLE DE FLUXO (IF, FOR, WHILE)
+document.write("<h2>Controle de Fluxo</h2>");
+
+// IF
+if (idade >= 18) {
+    document.write("Maior de idade<br>");
+} else {
+    document.write("Menor de idade<br>");
+}
+
+// FOR (repete 3 vezes)
+document.write("For: ");
+for (let i = 0; i < 3; i++) {
+    document.write(i + " ");
+}
+document.write("<br>");
+
+// WHILE
+document.write("While: ");
+let j = 0;
+while (j < 3) {
+    document.write(j + " ");
+    j++;
+}
+document.write("<br><br>");
+
+
+// STRINGS
+document.write("<h2>Strings</h2>");
+let texto = "JavaScript é poderoso";
+
+// Métodos de string
+document.write(texto.toUpperCase() + "<br>"); // maiúsculo
+document.write(texto.toLowerCase() + "<br>"); // minúsculo
+document.write(texto.length + "<br>");        // tamanho
+document.write("<br>");
+
+
+// ARRAYS
+document.write("<h2>Arrays</h2>");
+let frutas = ["Maçã", "Banana", "Laranja"];
+
+// Percorre o array
+frutas.forEach(function(fruta) {
+    document.write(fruta + "<br>");
+});
+document.write("<br>");
+
+
+// FUNÇÕES
+document.write("<h2>Funções</h2>");
+
+// Função tradicional
+function saudacao(nome) {
+    return "Olá, " + nome;
+}
+
+document.write(saudacao("Anderson") + "<br>");
+
+// Arrow function (forma moderna)
+const soma = (a, b) => a + b;
+document.write("Soma: " + soma(5, 3) + "<br><br>");
+
+
+// DOM (Document Object Model)
+// Permite manipular elementos HTML via JavaScript
+
+function mudarTexto() {
+    // Seleciona elemento pelo ID
+    let elemento = document.getElementById("titulo");
+    
+    // Altera o conteúdo do texto
+    elemento.innerHTML = "Texto alterado com JavaScript!";
+}
+</script>
+
+</body>
+</html>
