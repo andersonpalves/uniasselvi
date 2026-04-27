@@ -1,0 +1,7 @@
+Desafios para os alunos
+
+Implementar edição completa (alterar preço e nome).
+Criar uma nova classe Servico (ex: conserto de equipamentos) que também implementa Gerenciavel.
+Usar TreeMap ou TreeSet para ordenar produtos por nome.
+Implementar busca por nome usando Stream API.
+Criar uma camada de persistência simples em arquivo .txt usando FileWriter.
