@@ -76,10 +76,43 @@ void exemploListaCircular() {
     printf("...\n");
 }
 
+// ---------------- Lista Duplamente Encadeada Circular ----------------
+typedef struct NodeDuploCircular {
+    int valor;
+    struct NodeDuploCircular *prox;
+    struct NodeDuploCircular *ant;
+} NodeDuploCircular;
+
+void exemploListaDuplaCircular() {
+    NodeDuploCircular *n1 = malloc(sizeof(NodeDuploCircular));
+    NodeDuploCircular *n2 = malloc(sizeof(NodeDuploCircular));
+    NodeDuploCircular *n3 = malloc(sizeof(NodeDuploCircular));
+
+    n1->valor = 10;
+    n2->valor = 20;
+    n3->valor = 30;
+
+    // ligações circulares
+    n1->prox = n2; n1->ant = n3;
+    n2->prox = n3; n2->ant = n1;
+    n3->prox = n1; n3->ant = n2;
+
+    printf("\nLista Duplamente Encadeada Circular:\n");
+    NodeDuploCircular *atual = n1;
+    int count = 0;
+    while(count < 6) { // percorre duas voltas
+        printf("%d <-> ", atual->valor);
+        atual = atual->prox;
+        count++;
+    }
+    printf("...\n");
+}
+
 // ---------------- MAIN ----------------
 int main() {
     exemploListaSimples();
     exemploListaDupla();
     exemploListaCircular();
+    exemploListaDuplaCircular();
     return 0;
 }
