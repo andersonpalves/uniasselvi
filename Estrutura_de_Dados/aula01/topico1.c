@@ -63,5 +63,14 @@ int main() {
     printf("\nStruct alterada via ponteiro:\n");
     printf("Nome: %s, Idade: %d\n", ptrPessoa->nome, ptrPessoa->idade);
 
+    //ponteiros em ponteiros
+    int x = 10;
+    int *p = &x;      // ponteiro para int
+    int **pp = &p;    // ponteiro para ponteiro
+
+    printf("Valor de x: %d\n", x);
+    printf("Valor via p: %d\n", *p);
+    printf("Valor via pp: %d\n", **pp);
+
     return 0;
 }
