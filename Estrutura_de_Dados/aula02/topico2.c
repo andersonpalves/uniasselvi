@@ -1,8 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Função para imprimir o vetor
+void printArray(int arr[], int n) {
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\n");
+}
+
 // ---------------- MERGE SORT ----------------
-void merge(int arr[], int l, int m, int r) {
+void merge(int arr[], int l, int m, int r, int n) {
     int i, j, k;
     int n1 = m - l + 1;
     int n2 = r - m;
@@ -18,19 +24,22 @@ void merge(int arr[], int l, int m, int r) {
     }
     while (i < n1) arr[k++] = L[i++];
     while (j < n2) arr[k++] = R[j++];
+
+    printf("Merge [%d..%d]: ", l, r);
+    printArray(arr, n);
 }
 
-void mergeSort(int arr[], int l, int r) {
+void mergeSort(int arr[], int l, int r, int n) {
     if (l < r) {
         int m = l + (r - l) / 2;
-        mergeSort(arr, l, m);
-        mergeSort(arr, m + 1, r);
-        merge(arr, l, m, r);
+        mergeSort(arr, l, m, n);
+        mergeSort(arr, m + 1, r, n);
+        merge(arr, l, m, r, n);
     }
 }
 
 // ---------------- QUICK SORT ----------------
-int partition(int arr[], int low, int high) {
+int partition(int arr[], int low, int high, int n) {
     int pivot = arr[high];
     int i = (low - 1);
     for (int j = low; j < high; j++) {
@@ -40,14 +49,18 @@ int partition(int arr[], int low, int high) {
         }
     }
     int temp = arr[i + 1]; arr[i + 1] = arr[high]; arr[high] = temp;
+
+    printf("Partition [%d..%d] pivot=%d: ", low, high, pivot);
+    printArray(arr, n);
+
     return (i + 1);
 }
 
-void quickSort(int arr[], int low, int high) {
+void quickSort(int arr[], int low, int high, int n) {
     if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+        int pi = partition(arr, low, high, n);
+        quickSort(arr, low, pi - 1, n);
+        quickSort(arr, pi + 1, high, n);
     }
 }
 
@@ -68,18 +81,19 @@ void heapify(int arr[], int n, int i) {
 
 void heapSort(int arr[], int n) {
     for (int i = n / 2 - 1; i >= 0; i--) heapify(arr, n, i);
+
+    printf("Heap inicial: ");
+    printArray(arr, n);
+
     for (int i = n - 1; i > 0; i--) {
         int temp = arr[0]; arr[0] = arr[i]; arr[i] = temp;
+        printf("Swap raiz com arr[%d]: ", i);
+        printArray(arr, n);
         heapify(arr, i, 0);
     }
 }
 
 // ---------------- MAIN ----------------
-void printArray(int arr[], int n) {
-    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
-    printf("\n");
-}
-
 int main() {
     int arr1[] = {5, 3, 8, 4, 2, 7, 1, 6};
     int arr2[] = {5, 3, 8, 4, 2, 7, 1, 6};
@@ -87,15 +101,24 @@ int main() {
     int n = sizeof(arr1) / sizeof(arr1[0]);
 
     printf("Merge Sort:\n");
-    mergeSort(arr1, 0, n - 1);
+    printf("Estado inicial: ");
+    printArray(arr1, n);
+    mergeSort(arr1, 0, n - 1, n);
+    printf("Resultado final: ");
     printArray(arr1, n);
 
     printf("\nQuick Sort:\n");
-    quickSort(arr2, 0, n - 1);
+    printf("Estado inicial: ");
+    printArray(arr2, n);
+    quickSort(arr2, 0, n - 1, n);
+    printf("Resultado final: ");
     printArray(arr2, n);
 
     printf("\nHeap Sort:\n");
+    printf("Estado inicial: ");
+    printArray(arr3, n);
     heapSort(arr3, n);
+    printf("Resultado final: ");
     printArray(arr3, n);
 
     return 0;
