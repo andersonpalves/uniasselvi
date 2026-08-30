@@ -1,4 +1,6 @@
-package unidade2;
+package unidade2.pdv.modelos;
+
+import unidade2.pdv.Cliente;
 
 public class Recibo {
     public void gerarRecibo(Cliente cliente, double valor) {

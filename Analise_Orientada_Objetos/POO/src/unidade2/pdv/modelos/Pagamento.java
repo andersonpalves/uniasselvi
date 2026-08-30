@@ -1,4 +1,4 @@
-package unidade2;
+package unidade2.pdv.modelos;
 
 public class Pagamento {
     public void realizarPagamento(double valor) {

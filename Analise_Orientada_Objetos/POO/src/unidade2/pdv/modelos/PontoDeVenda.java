@@ -1,4 +1,7 @@
-package unidade2;
+package unidade2.pdv.modelos;
+
+import unidade2.pdv.Caixa;
+import unidade2.pdv.Cliente;
 
 public class PontoDeVenda {
     public static void main(String[] args) {

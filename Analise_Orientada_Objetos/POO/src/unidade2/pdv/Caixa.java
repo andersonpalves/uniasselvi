@@ -1,4 +1,8 @@
-package unidade2;
+package unidade2.pdv;
+
+import unidade2.pdv.modelos.Pagamento;
+import unidade2.pdv.modelos.Produto;
+import unidade2.pdv.modelos.Recibo;
 
 public class Caixa {
     public void processarVenda(Cliente cliente, Produto produto) {

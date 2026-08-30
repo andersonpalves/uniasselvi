@@ -1,4 +1,4 @@
-package unidade2;
+package unidade2.pdv;
 
 public class Cliente {
     private String nome;
